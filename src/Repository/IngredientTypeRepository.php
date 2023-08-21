@@ -22,7 +22,7 @@ class IngredientTypeRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return IngredientType[] Returns an array of IngredientType objects
+//     * @return IngredientFormType[] Returns an array of IngredientFormType objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class IngredientTypeRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?IngredientType
+//    public function findOneBySomeField($value): ?IngredientFormType
 //    {
 //        return $this->createQueryBuilder('i')
 //            ->andWhere('i.exampleField = :val')

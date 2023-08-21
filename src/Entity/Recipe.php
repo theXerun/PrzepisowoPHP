@@ -18,9 +18,6 @@ class Recipe
     #[ORM\Column(length: 2048)]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: Ingredient::class, inversedBy: 'recipes')]
-    private Collection $ingredients;
-
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     private ?User $author = null;
 
@@ -29,6 +26,9 @@ class Recipe
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Ingredient::class, orphanRemoval: true)]
+    private Collection $ingredients;
 
     public function __construct()
     {
@@ -48,34 +48,6 @@ class Recipe
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getIngredients(): ?string
-    {
-        return $this->ingredients;
-    }
-
-    public function setIngredients(string $ingredients): static
-    {
-        $this->ingredients = $ingredients;
-
-        return $this;
-    }
-
-    public function addIngredient(Ingredient $ingredient): static
-    {
-        if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients->add($ingredient);
-        }
-
-        return $this;
-    }
-
-    public function removeIngredient(Ingredient $ingredient): static
-    {
-        $this->ingredients->removeElement($ingredient);
 
         return $this;
     }
@@ -112,6 +84,36 @@ class Recipe
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ingredient>
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): static
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients->add($ingredient);
+            $ingredient->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): static
+    {
+        if ($this->ingredients->removeElement($ingredient)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getRecipe() === $this) {
+                $ingredient->setRecipe(null);
+            }
+        }
 
         return $this;
     }

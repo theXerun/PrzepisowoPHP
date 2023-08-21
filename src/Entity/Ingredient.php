@@ -15,15 +15,16 @@ class Ingredient
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredients')]
-    private Collection $recipes;
-
     #[ORM\ManyToOne(inversedBy: 'ingredients')]
     #[ORM\JoinColumn(nullable: false)]
     private ?IngredientType $type = null;
 
     #[ORM\Column]
     private ?int $quantity = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ingredients')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Recipe $recipe = null;
 
     public function __construct()
     {
@@ -59,33 +60,6 @@ class Ingredient
         return $this;
     }
 
-    /**
-     * @return Collection<int, Recipe>
-     */
-    public function getRecipes(): Collection
-    {
-        return $this->recipes;
-    }
-
-    public function addRecipe(Recipe $recipe): static
-    {
-        if (!$this->recipes->contains($recipe)) {
-            $this->recipes->add($recipe);
-            $recipe->addIngredient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRecipe(Recipe $recipe): static
-    {
-        if ($this->recipes->removeElement($recipe)) {
-            $recipe->removeIngredient($this);
-        }
-
-        return $this;
-    }
-
     public function getType(): ?IngredientType
     {
         return $this->type;
@@ -106,6 +80,18 @@ class Ingredient
     public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getRecipe(): ?Recipe
+    {
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): static
+    {
+        $this->recipe = $recipe;
 
         return $this;
     }
