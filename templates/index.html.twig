@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomepageController!{% endblock %}
+
+{% block body %}
+    <h1>Dostępne przepisy dla {{ username }}</h1>
+    {% if recipes|length > 0 %}
+        {% for recipe in recipes %}
+            {{ recipe }}
+        {% endfor %}
+    {% else %}
+        <p>Wygląda na to że nie masz żadnych :(</p>
+        <p>Dodaj rzeczy do lodówki albo nowe przepisy</p>
+    {% endif %}
+{% endblock %}
