@@ -9,9 +9,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RecipeFormType extends AbstractType
@@ -23,12 +25,19 @@ class RecipeFormType extends AbstractType
             ->add('ingredients', CollectionType::class, [
                 'entry_type' => IngredientFormType::class,
                 'allow_add' => true,
-                'prototype' => true,
+                'allow_delete' => true,
+//                'prototype' => true,
                 'by_reference' => false,
+                'delete_empty' => true,
 
             ])
             ->add('description', TextareaType::class)
             ->add('isPublic', CheckboxType::class)
+            ->add('Zapisz', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-success'
+                ]
+            ])
         ;
     }
 
