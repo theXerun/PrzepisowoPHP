@@ -3,68 +3,34 @@
 {% block title %}Hello RecipeController!{% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
+{#    <script>#}
+{#        document.addEventListener('DOMContentLoaded', function () {#}
+{#            const addIngredientButton = document.getElementById('add-ingredient');#}
+{#            const ingredientsContainer = document.getElementById('ingredients');#}
 
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script>
-        let $collectionHolder;
-        const $addNewItem = $('<a href="#" class="btn btn-info">Add new item</a>');
+{#            addIngredientButton.addEventListener('click', function () {#}
+{#                const index = ingredientsContainer.children.length;#}
+{#                const prototype = ingredientsContainer.getAttribute('data-prototype').replace(/__name__/g, String(index));#}
+{#                const newIngredient = document.createElement('div');#}
+{#                newIngredient.innerHTML = prototype;#}
+{#                ingredientsContainer.appendChild(newIngredient);#}
+{#            });#}
 
-        $(document).ready(function () {
-            console.log("tak")
-            $collectionHolder = $('#ingredient_list');
-            $collectionHolder.append($addNewItem);
-            $collectionHolder.data('index', $collectionHolder.find('.panel').length)
-            $collectionHolder.find('.panel').each(function () {
-                addRemoveButton($(this));
-            });
-            $addNewItem.click(function (e) {
-                e.preventDefault();
-                addNewForm();
-            })
-        });
-
-        function addNewForm() {
-            const prototype = $collectionHolder.data('prototype');
-            const index = $collectionHolder.data('index');
-            let newForm = prototype;
-            newForm = newForm.replace(/__name__/g, index);
-            $collectionHolder.data('index', index+1);
-            const $panel = $('<div class="panel panel-warning"><div class="panel-heading"></div></div>');
-            const $panelBody = $('<div class="panel-body"></div>').append(newForm);
-            $panel.append($panelBody);
-            addRemoveButton($panel);
-            $addNewItem.before($panel);
-        }
-
-        function addRemoveButton ($panel) {
-            const $removeButton = $('<a href="#" class="btn btn-danger">Remove</a>');
-            const $panelFooter = $('<div class="panel-footer"></div>').append($removeButton);
-            $removeButton.click(function (e) {
-                e.preventDefault();
-                $(e.target).parents('.panel').slideUp(1000, function () {
-                    $(this).remove();
-                })
-            });
-            $panel.append($panelFooter);
-        }
+{#            ingredientsContainer.addEventListener('click', function (event) {#}
+{#                if (event.target.classList.contains('remove-ingredient')) {#}
+{#                    const ingredient = event.target.closest('.ingredient');#}
+{#                    ingredient.remove();#}
+{#                }#}
+{#            });#}
+{#        });#}
     </script>
-
 {% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        <div class="col-sm-8 col-sm-offset-2" id="ingredient_list" data-prototype="{{ form_widget(form.ingredients.vars.prototype)|e('html_attr') }}">
-            {% for row in form.ingredients %}
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <strong>{{ row.vars.value.title }}</strong>
-                    </div>
-                    <div class="panel-body">
-                        {{ form_row(row) }}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {{ form_end((form)) }}
+{#    {{ form_start(form) }}#}
+{#    {{ form_row(form.name) }}#}
+{#    {{ form_row(form.ingredients) }}#}
+{#    {{ form_end((form)) }}#}
+    {{ form(form) }}
 {% endblock %}

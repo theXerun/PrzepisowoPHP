@@ -29,6 +29,13 @@ class RecipeFormType extends AbstractType
 //                'prototype' => true,
                 'by_reference' => false,
                 'delete_empty' => true,
+                'attr' => [
+                    'data-entry-add-label' => 'Dodaj',
+                    'data-entry-remove-label' => 'Usuń',
+                ],
+                'entry_options' => [
+                    'label' => false,
+                ],
 
             ])
             ->add('description', TextareaType::class)
