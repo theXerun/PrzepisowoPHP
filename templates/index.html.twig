@@ -5,9 +5,11 @@
 {% block body %}
     <h1>Dostępne przepisy dla {{ username }}</h1>
     {% if recipes|length > 0 %}
+    <div class="flex flex-wrap justify-center space-x-4">
         {% for recipe in recipes %}
-            {{ recipe }}
+            {{ component('RecipeComponent', { id: recipe.id, name: recipe.name, description: recipe.description}) }}
         {% endfor %}
+    </div>
     {% else %}
         <p>Wygląda na to że nie masz żadnych :(</p>
         <p>Dodaj rzeczy do lodówki albo nowe przepisy</p>

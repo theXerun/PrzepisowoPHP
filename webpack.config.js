@@ -72,10 +72,12 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
     .enablePostCssLoader(options => {
-        options.plugins = [
-            tailwindcss,
-            autoprefixer,
-        ];
+        options.postcssOptions = {
+            plugins: [
+                tailwindcss,
+                autoprefixer,
+            ]
+        }
     })
 ;
 

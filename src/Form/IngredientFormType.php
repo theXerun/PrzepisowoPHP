@@ -19,9 +19,12 @@ class IngredientFormType extends AbstractType
                 'class' => IngredientType::class,
                 'choice_label' => 'name',
                 'by_reference' => false,
-                'placeholder' => 'Wybierz typ składnika'
+                'placeholder' => 'Wybierz typ składnika',
+                'label' => "Składnik",
             ])
-            ->add('quantity', IntegerType::class)
+            ->add('quantity', IntegerType::class, [
+                'label' => "Ilość"
+            ])
         ;
     }
 

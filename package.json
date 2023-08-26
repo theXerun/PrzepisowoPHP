@@ -6,6 +6,7 @@
         "@tailwindcss/forms": "^0.5.5",
         "autoprefixer": "^10.4.15",
         "core-js": "^3.23.0",
+        "daisyui": "^3.6.3",
         "postcss": "^8.4.28",
         "postcss-loader": "^7.3.3",
         "regenerator-runtime": "^0.13.9",
@@ -26,6 +27,7 @@
         "@a2lix/symfony-collection": "^0.6.1",
         "@hotwired/stimulus": "^3.2.2",
         "@symfony/stimulus-bridge": "^3.2.2",
+        "@tailwindcss/typography": "^0.5.9",
         "jquery": "^3.7.0",
         "stimulus": "^3.2.2"
     }

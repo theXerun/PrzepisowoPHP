@@ -15,4 +15,5 @@ return [
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     A2lix\AutoFormBundle\A2lixAutoFormBundle::class => ['all' => true],
     A2lix\TranslationFormBundle\A2lixTranslationFormBundle::class => ['all' => true],
+    Symfony\UX\TwigComponent\TwigComponentBundle::class => ['all' => true],
 ];

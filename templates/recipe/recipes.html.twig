@@ -3,5 +3,18 @@
 {% block title %}Hello RecipeController!{% endblock %}
 
 {% block body %}
+    <div class="flex flex-row justify-between">
+        <h1>Wszystkie przepisy</h1>
+        <a href="/add-recipe">
+            <button class="btn btn-primary">Dodaj Przepis</button>
+        </a>
+    </div>
+
+    <div class="flex flex-wrap justify-center space-x-4">
+        {% for recipe in all_recipes %}
+            {{ component('RecipeComponent', { id: recipe.id, name: recipe.name, description: recipe.description}) }}
+        {% endfor %}
+    </div>
+
 
 {% endblock %}

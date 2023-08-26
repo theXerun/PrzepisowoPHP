@@ -15,10 +15,6 @@ class Ingredient
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ingredients')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?IngredientType $type = null;
-
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -26,38 +22,18 @@ class Ingredient
     #[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe = null;
 
-    public function __construct()
-    {
-        $this->recipes = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'ingredients')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?IngredientType $type = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function setId(?int $id): void
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getQuantityType(): ?string
-    {
-        return $this->quantityType;
-    }
-
-    public function setQuantityType(string $quantityType): static
-    {
-        $this->quantityType = $quantityType;
-
-        return $this;
+        $this->id = $id;
     }
 
     public function getType(): ?IngredientType
@@ -65,11 +41,9 @@ class Ingredient
         return $this->type;
     }
 
-    public function setType(?IngredientType $type): static
+    public function setType(?IngredientType $type): void
     {
         $this->type = $type;
-
-        return $this;
     }
 
     public function getQuantity(): ?int
@@ -77,11 +51,9 @@ class Ingredient
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): static
+    public function setQuantity(?int $quantity): void
     {
         $this->quantity = $quantity;
-
-        return $this;
     }
 
     public function getRecipe(): ?Recipe

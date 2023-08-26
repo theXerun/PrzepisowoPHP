@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ingredient;
 use App\Entity\Recipe;
 use App\Form\RecipeFormType;
+use App\Repository\IngredientTypeRepository;
 use App\Repository\RecipeRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,10 +32,15 @@ class RecipeController extends AbstractController
         ]);
     }
     #[Route('/recipe/{id}', name: 'app_recipe')]
-    public function recipe(int $id, RecipeRepository $recipeRepository): Response
+    public function recipe(Recipe $recipe): Response
     {
+        if ($recipe->isIsPublic() || $recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
+            return $this->render('recipe/index.html.twig', [
+                'recipe' => $recipe,
+            ]);
+        }
         return $this->render('recipe/index.html.twig', [
-            'controller_name' => 'RecipeController',
+            'recipe' => new Recipe(),
         ]);
     }
 
@@ -52,10 +58,37 @@ class RecipeController extends AbstractController
             $recipe->setAuthor($user);
             $entityManager->persist($recipe);
             $entityManager->flush();
-            return $this->redirectToRoute('/recipe/'.$recipe->getId());
+            return $this->redirect('/recipe/'.$recipe->getId());
         }
         return $this->render('/recipe/add.html.twig',[
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/edit-recipe/{id}', name: 'edit_recipe')]
+    public function edit(Request $request, EntityManagerInterface $entityManager, IngredientTypeRepository $ingredientTypeRepository, Recipe $recipe): Response
+    {
+
+        if (!$recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
+            return new Response('Brak dostępu', 403);
+        }
+
+        $ingredientTypes = $ingredientTypeRepository->findAll();
+        foreach ($ingredientTypes as $ingredientType) {
+            $entityManager->refresh($ingredientType);
+        }
+
+        $form = $this->createForm(RecipeFormType::class, $recipe);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipe = $form->getData();
+            $entityManager->persist($recipe);
+            $entityManager->flush();
+            return $this->redirect('/recipe/'.$recipe->getId());
+        }
+        return $this->render('/recipe/add.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+
 }

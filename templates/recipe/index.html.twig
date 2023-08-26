@@ -1,20 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RecipeController!{% endblock %}
+{% block title %}{{ recipe.name }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/xerun/PhpstormProjects/Przepisowo/src/Controller/RecipeController.php'|file_link(0) }}">src/Controller/RecipeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/xerun/PhpstormProjects/Przepisowo/templates/recipe/index.html.twig'|file_link(0) }}">templates/recipe/index.html.twig</a></code></li>
+<div class="flex-col">
+    <h2>{{ recipe.name }}</h2>
+    <h3>Składniki:</h3>
+    <ul class="list-disc">
+    {% for ingredient in recipe.ingredients %}
+        <li>{{ ingredient.type.name }} {{ ingredient.quantity }} {{ ingredient.type.quantityType }}</li>
+    {% endfor %}
     </ul>
+    <h3>Opis:</h3>
+    <p>{{ recipe.description }}</p>
+
+    <a href="/edit-recipe/{{ recipe.id }}">
+        <button class="btn btn-accent">Edytuj</button>
+    </a>
 </div>
 {% endblock %}

@@ -1,36 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RecipeController!{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-{#    <script>#}
-{#        document.addEventListener('DOMContentLoaded', function () {#}
-{#            const addIngredientButton = document.getElementById('add-ingredient');#}
-{#            const ingredientsContainer = document.getElementById('ingredients');#}
-
-{#            addIngredientButton.addEventListener('click', function () {#}
-{#                const index = ingredientsContainer.children.length;#}
-{#                const prototype = ingredientsContainer.getAttribute('data-prototype').replace(/__name__/g, String(index));#}
-{#                const newIngredient = document.createElement('div');#}
-{#                newIngredient.innerHTML = prototype;#}
-{#                ingredientsContainer.appendChild(newIngredient);#}
-{#            });#}
-
-{#            ingredientsContainer.addEventListener('click', function (event) {#}
-{#                if (event.target.classList.contains('remove-ingredient')) {#}
-{#                    const ingredient = event.target.closest('.ingredient');#}
-{#                    ingredient.remove();#}
-{#                }#}
-{#            });#}
-{#        });#}
-    </script>
-{% endblock %}
+{% block title %}Dodawanie przepisu{% endblock %}
 
 {% block body %}
-{#    {{ form_start(form) }}#}
-{#    {{ form_row(form.name) }}#}
-{#    {{ form_row(form.ingredients) }}#}
-{#    {{ form_end((form)) }}#}
     {{ form(form) }}
 {% endblock %}

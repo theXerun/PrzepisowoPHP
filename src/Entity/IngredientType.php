@@ -21,6 +21,14 @@ class IngredientType
     #[ORM\Column(length: 255)]
     private ?string $quantityType = null;
 
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Ingredient::class, cascade: ['persist'])]
+    private Collection $ingredients;
+
+    public function __construct()
+    {
+        $this->ingredients = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +54,36 @@ class IngredientType
     public function setQuantityType(string $quantityType): static
     {
         $this->quantityType = $quantityType;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ingredient>
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): static
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients->add($ingredient);
+            $ingredient->setType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): static
+    {
+        if ($this->ingredients->removeElement($ingredient)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getType() === $this) {
+                $ingredient->setType(null);
+            }
+        }
 
         return $this;
     }
