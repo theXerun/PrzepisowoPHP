@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IngredientsController extends AbstractController
 {
-    #[Route('/add-ingredient', name: 'app_ingredients')]
+    #[Route('/ingredient/add', name: 'app_ingredients')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $route = $request->headers->get('referer');

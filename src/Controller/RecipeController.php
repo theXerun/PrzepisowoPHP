@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecipeController extends AbstractController
 {
 
-    #[Route('/recipes', name: 'all_recipes')]
+    #[Route('/recipe/', name: 'all_recipes')]
     public function allRecipes(RecipeRepository $recipeRepository, UserRepository $userRepository): Response
     {
 
@@ -44,7 +44,7 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    #[Route('/add-recipe', name: 'add_recipe')]
+    #[Route('/recipe/add', name: 'add_recipe')]
     public function add(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $recipe = new Recipe();
@@ -65,17 +65,12 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    #[Route('/edit-recipe/{id}', name: 'edit_recipe')]
+    #[Route('/recipe/edit/{id}', name: 'edit_recipe')]
     public function edit(Request $request, EntityManagerInterface $entityManager, IngredientTypeRepository $ingredientTypeRepository, Recipe $recipe): Response
     {
 
         if (!$recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
             return new Response('Brak dostępu', 403);
-        }
-
-        $ingredientTypes = $ingredientTypeRepository->findAll();
-        foreach ($ingredientTypes as $ingredientType) {
-            $entityManager->refresh($ingredientType);
         }
 
         $form = $this->createForm(RecipeFormType::class, $recipe);
