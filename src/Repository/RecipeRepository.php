@@ -51,7 +51,7 @@ class RecipeRepository extends ServiceEntityRepository
                     $ig = $fridge->getIngredients()->findFirst(function ($key, Ingredient $value) use ($ingredient) {
                         return $value->getType()->getName() == $ingredient->getType()->getName();
                     });
-                    if ($ig == null || $ig->getQuantity() <= $ingredient->getQuantity()) {
+                    if ($ig == null || $ig->getQuantity() < $ingredient->getQuantity()) {
                         throw new BreakException();
                     }
                 }
