@@ -61,7 +61,7 @@ class RecipeController extends AbstractController
             return $this->redirect('/recipe/'.$recipe->getId());
         }
         return $this->render('/recipe/add.html.twig',[
-            'form' => $form->createView()
+            'form' => $form
         ]);
     }
 

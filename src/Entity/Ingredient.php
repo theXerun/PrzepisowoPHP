@@ -18,13 +18,15 @@ class Ingredient
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ingredients')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'ingredients')]
     private ?Recipe $recipe = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ingredients')]
+    #[ORM\ManyToOne(cascade: ['all'], inversedBy: 'ingredients')]
     #[ORM\JoinColumn(nullable: false)]
     private ?IngredientType $type = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'ingredients')]
+    private ?Fridge $fridge = null;
 
     public function getId(): ?int
     {
@@ -66,5 +68,22 @@ class Ingredient
         $this->recipe = $recipe;
 
         return $this;
+    }
+
+    public function getFridge(): ?Fridge
+    {
+        return $this->fridge;
+    }
+
+    public function setFridge(?Fridge $fridge): static
+    {
+        $this->fridge = $fridge;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->type->getName();
     }
 }

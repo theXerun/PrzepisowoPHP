@@ -15,7 +15,7 @@ class Fridge
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: Ingredient::class)]
+    #[ORM\OneToMany(mappedBy: 'fridge', targetEntity: Ingredient::class, cascade: ['all'])]
     private Collection $ingredients;
 
     public function __construct()
@@ -40,6 +40,7 @@ class Fridge
     {
         if (!$this->ingredients->contains($ingredient)) {
             $this->ingredients->add($ingredient);
+            $ingredient->setFridge($this);
         }
 
         return $this;
@@ -47,8 +48,12 @@ class Fridge
 
     public function removeIngredient(Ingredient $ingredient): static
     {
-        $this->ingredients->removeElement($ingredient);
-
+        if ($this->ingredients->removeElement($ingredient)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getRecipe() === $this) {
+                $ingredient->setRecipe(null);
+            }
+        }
         return $this;
     }
 }

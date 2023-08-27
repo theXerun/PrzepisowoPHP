@@ -14,6 +14,11 @@
     </ul>
     <h3>Opis:</h3>
     <p>{{ recipe.description }}</p>
+    <div class="flex flex-row items-baseline flex-wrap space-x-4">
+        <h3>Autor:</h3>
+        <p>{{ recipe.author.username }}</p>
+    </div>
+
 
     <a href="/recipe/edit/{{ recipe.id }}">
         <button class="btn btn-accent">Edytuj</button>

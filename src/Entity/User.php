@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Fridge $fridge = null;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Recipe::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Recipe::class, cascade: ['persist'])]
     private Collection $recipes;
 
     public function __construct()

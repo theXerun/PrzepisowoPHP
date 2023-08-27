@@ -22,7 +22,7 @@ class HomepageController extends AbstractController
             'username' => $this->getUser()->getUserIdentifier()
         ]);
 
-        $recipes = $recipeRepository->getAvailableRecipes($user);
+        $recipes = $recipeRepository->getDoableRecipes($user);
         return $this->render('index.html.twig', [
             'username' => $this->getUser()->getUserIdentifier(),
             'recipes' => $recipes,

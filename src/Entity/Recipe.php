@@ -18,7 +18,7 @@ class Recipe
     #[ORM\Column(length: 2048)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'recipes')]
     private ?User $author = null;
 
     #[ORM\Column]
@@ -27,7 +27,7 @@ class Recipe
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Ingredient::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Ingredient::class, cascade: ['all'], orphanRemoval: true)]
     private Collection $ingredients;
 
     public function __construct()
