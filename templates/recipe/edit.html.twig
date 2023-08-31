@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modyfikowanie przepisu{% endblock %}
+
+{% block body %}
+
+    <dialog id="my_modal_1" class="modal">
+        <form action="{{ path('delete_recipe', {id: id}) }}" method="post" class="modal-box m-4">
+            <h3 class="font-bold text-lg">Uwaga!</h3>
+            <p class="py-4">Czy na pewno chcesz usunąć przepis?</p>
+            <div class="modal-action">
+                <button class="btn btn-accent">Nahh</button>
+                <button type="submit" class="btn btn-warning">Usuń</button>
+            </div>
+        </form>
+    </dialog>
+
+    {{ form(form) }}
+
+    <button type="submit" class="btn" onclick="my_modal_1.showModal()">Usuń Przepis</button>
+{% endblock %}

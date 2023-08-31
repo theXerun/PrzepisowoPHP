@@ -7,3 +7,7 @@ controllers:
 app_recipe:
     path: /recipe/{id}
     controller: App\Controller\RecipeController::recipe
+
+app_logout:
+    path: /logout
+    methods: POST

@@ -21,7 +21,7 @@ class Ingredient
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'ingredients')]
     private ?Recipe $recipe = null;
 
-    #[ORM\ManyToOne(cascade: ['all'], inversedBy: 'ingredients')]
+    #[ORM\ManyToOne(inversedBy: 'ingredients')]
     #[ORM\JoinColumn(nullable: false)]
     private ?IngredientType $type = null;
 

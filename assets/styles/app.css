@@ -4,3 +4,7 @@
 body {
     @apply h-screen;
 }
+
+form {
+    @apply flex flex-col;
+}

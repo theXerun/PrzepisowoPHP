@@ -39,7 +39,9 @@ class RecipeFormType extends AbstractType
 
             ])
             ->add('description', TextareaType::class)
-            ->add('isPublic', CheckboxType::class)
+            ->add('isPublic', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('Zapisz', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-success'

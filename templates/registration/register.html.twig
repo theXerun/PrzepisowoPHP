@@ -1,19 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Rejestracja{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h1>Rejestracja</h1>
 
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.username) }}
         {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
+            label: 'Hasło'
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
+        <button type="submit" class="btn">Zarejestruj</button>
     {{ form_end(registrationForm) }}
+
+    <a href="{{ path('app_login') }}"><button class="btn">Logowanie</button></a>
 {% endblock %}

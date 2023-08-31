@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\FridgeFormType;
 use App\Repository\FridgeRepository;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +20,21 @@ class FridgeController extends AbstractController
     {
         $user = $this->getUser();
         $fridge = $userRepository->getByIdentifier($user->getUserIdentifier())->getFridge();
+        $originalIngredients = new ArrayCollection();
+
+        foreach ($fridge->getIngredients() as $ingredient) {
+            $originalIngredients->add($ingredient);
+        }
         $form = $this->createForm(FridgeFormType::class, $fridge);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $fridge = $form->getData();
+            foreach ($originalIngredients as $ingredient) {
+                if (false === $fridge->getIngredients()->contains($ingredient)) {
+                    $fridge->removeIngredient($ingredient);
+                    $entityManager->remove($ingredient);
+                }
+            }
             $entityManager->persist($fridge);
             $entityManager->flush();
             return $this->redirectToRoute('app_fridge');

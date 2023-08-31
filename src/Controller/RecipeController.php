@@ -34,14 +34,18 @@ class RecipeController extends AbstractController
     #[Route('/recipe/{id}', name: 'app_recipe')]
     public function recipe(Recipe $recipe): Response
     {
-        if ($recipe->isIsPublic() || $recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
+        $isAuthor = false;
+        if ($recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
+            $isAuthor = true;
+        }
+        if($recipe->isIsPublic() || $isAuthor) {
             return $this->render('recipe/index.html.twig', [
                 'recipe' => $recipe,
+                'is_author' => $isAuthor,
             ]);
         }
-        return $this->render('recipe/index.html.twig', [
-            'recipe' => new Recipe(),
-        ]);
+
+        return new Response('Nie ma takiego przepisu', 404);
     }
 
     #[Route('/recipe/add', name: 'add_recipe')]
@@ -66,24 +70,50 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/recipe/edit/{id}', name: 'edit_recipe')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, IngredientTypeRepository $ingredientTypeRepository, Recipe $recipe): Response
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        if (!$recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
+        if (!($recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier())) {
             return new Response('Brak dostępu', 403);
+        }
+
+        $originalIngredients = new ArrayCollection();
+
+        foreach ($recipe->getIngredients() as $ingredient) {
+            $originalIngredients->add($ingredient);
         }
 
         $form = $this->createForm(RecipeFormType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $recipe = $form->getData();
+            foreach ($originalIngredients as $ingredient) {
+                if (false === $recipe->getIngredients()->contains($ingredient)) {
+                    $recipe->removeIngredient($ingredient);
+                    $entityManager->remove($ingredient);
+                }
+            }
             $entityManager->persist($recipe);
             $entityManager->flush();
-            return $this->redirect('/recipe/'.$recipe->getId());
+            return $this->redirectToRoute('app_recipe', $recipe->getId());
         }
-        return $this->render('/recipe/add.html.twig',[
-            'form' => $form->createView()
+        return $this->render('/recipe/edit.html.twig',[
+            'form' => $form->createView(),
+            'id' => $recipe->getId(),
         ]);
+    }
+
+    #[Route('/recipe/delete/{id}', name: 'delete_recipe')]
+    public function delete(Request $request, EntityManagerInterface $entityManager, Recipe $recipe): Response
+    {
+        if (!($recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier())) {
+            return new Response('Brak dostępu', 403);
+        }
+
+        $entityManager->remove($recipe);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('all_recipes');
     }
 
 }

@@ -19,9 +19,10 @@
         <p>{{ recipe.author.username }}</p>
     </div>
 
-
-    <a href="/recipe/edit/{{ recipe.id }}">
-        <button class="btn btn-accent">Edytuj</button>
-    </a>
+    {% if is_author %}
+        <a href="{{ path('edit_recipe', {id: recipe.id}) }}">
+            <button class="btn btn-accent">Edytuj</button>
+        </a>
+    {% endif %}
 </div>
 {% endblock %}
