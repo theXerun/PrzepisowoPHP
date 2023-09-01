@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Ingredient;
 use App\Entity\Recipe;
+use App\Entity\User;
 use App\Form\RecipeFormType;
 use App\Repository\IngredientTypeRepository;
 use App\Repository\RecipeRepository;
@@ -32,7 +33,7 @@ class RecipeController extends AbstractController
         ]);
     }
     #[Route('/recipe/{id}', name: 'app_recipe')]
-    public function recipe(Recipe $recipe): Response
+    public function recipe(Recipe $recipe, RecipeRepository $recipeRepository, UserRepository $userRepository): Response
     {
         $isAuthor = false;
         if ($recipe->getAuthor()->getUsername() == $this->getUser()->getUserIdentifier()) {
@@ -42,10 +43,11 @@ class RecipeController extends AbstractController
             return $this->render('recipe/index.html.twig', [
                 'recipe' => $recipe,
                 'is_author' => $isAuthor,
+                'is_doable' => $recipeRepository->isRecipeDoable($recipe, $userRepository->getByIdentifier($this->getUser()->getUserIdentifier()))
             ]);
         }
 
-        return new Response('Nie ma takiego przepisu', 404);
+        return new Response('Brak dostępu', 403);
     }
 
     #[Route('/recipe/add', name: 'add_recipe')]
@@ -62,7 +64,7 @@ class RecipeController extends AbstractController
             $recipe->setAuthor($user);
             $entityManager->persist($recipe);
             $entityManager->flush();
-            return $this->redirect('/recipe/'.$recipe->getId());
+            return $this->redirectToRoute('app_recipe', ['id' => $recipe->getId()]);
         }
         return $this->render('/recipe/add.html.twig',[
             'form' => $form
@@ -114,6 +116,29 @@ class RecipeController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('all_recipes');
+    }
+
+    #[Route('/done/{id}', name: 'done_recipe')]
+    public function done(Recipe $recipe, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $userRepository->getByIdentifier($this->getUser()->getUserIdentifier());
+        $fridge = $user->getFridge();
+
+        foreach ($recipe->getIngredients() as $ingredient) {
+            $found = $fridge->getIngredients()->findFirst(function (int $key, Ingredient $i) use ($ingredient) {
+                return $i->getType()->getId() == $ingredient->getType()->getId();
+            });
+            if ($found != null) {
+                if ($found->getQuantity() - $ingredient->getQuantity() > 0) {
+                    $found->setQuantity($found->getQuantity() - $ingredient->getQuantity());
+                } else {
+                    $fridge->removeIngredient($found);
+                }
+            }
+        }
+        $entityManager->persist($fridge);
+        $entityManager->flush();
+        return $this->redirectToRoute("app_homepage");
     }
 
 }

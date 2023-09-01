@@ -15,7 +15,6 @@ class IngredientsController extends AbstractController
     #[Route('/ingredient/add', name: 'app_ingredients')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $route = $request->headers->get('referer');
         $ingredientType = new IngredientType();
         $form = $this->createForm(IngredientTypeType::class, $ingredientType);
         $form->handleRequest($request);
@@ -23,7 +22,7 @@ class IngredientsController extends AbstractController
             $ingredientType = $form->getData();
             $entityManager->persist($ingredientType);
             $entityManager->flush();
-            return $this->redirectToRoute($route);
+            return $this->redirectToRoute('add_recipe');
         }
         return $this->render('ingredients/index.html.twig', [
             'form' => $form,

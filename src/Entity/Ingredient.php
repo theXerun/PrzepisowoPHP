@@ -18,14 +18,14 @@ class Ingredient
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'ingredients')]
+    #[ORM\ManyToOne(inversedBy: 'ingredients')]
     private ?Recipe $recipe = null;
 
     #[ORM\ManyToOne(inversedBy: 'ingredients')]
     #[ORM\JoinColumn(nullable: false)]
     private ?IngredientType $type = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'ingredients')]
+    #[ORM\ManyToOne(inversedBy: 'ingredients')]
     private ?Fridge $fridge = null;
 
     public function getId(): ?int

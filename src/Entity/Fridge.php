@@ -15,7 +15,7 @@ class Fridge
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'fridge', targetEntity: Ingredient::class, cascade: ['all'])]
+    #[ORM\OneToMany(mappedBy: 'fridge', targetEntity: Ingredient::class, cascade: ['persist', 'remove'])]
     private Collection $ingredients;
 
     public function __construct()
@@ -52,6 +52,9 @@ class Fridge
             // set the owning side to null (unless already changed)
             if ($ingredient->getRecipe() === $this) {
                 $ingredient->setRecipe(null);
+            }
+            if ($ingredient->getFridge() === $this) {
+                $ingredient->setFridge(null);
             }
         }
         return $this;

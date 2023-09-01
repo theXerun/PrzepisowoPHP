@@ -3,5 +3,8 @@
 {% block title %}Dodawanie przepisu{% endblock %}
 
 {% block body %}
-    {{ form(form) }}
+        {{ form(form) }}
+        <a href="{{ path('app_ingredients') }}">
+            <button class="btn">Dodaj więcej typów składników</button>
+        </a>
 {% endblock %}

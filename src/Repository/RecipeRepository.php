@@ -63,6 +63,23 @@ class RecipeRepository extends ServiceEntityRepository
         return $doable->toArray();
     }
 
+    public function isRecipeDoable(Recipe $recipe, User $user): bool
+    {
+        try {
+            foreach ($recipe->getIngredients() as $ingredient) {
+                $ig = $user->getFridge()->getIngredients()->findFirst(function ($key, Ingredient $value) use ($ingredient) {
+                    return $value->getType()->getName() == $ingredient->getType()->getName();
+                });
+                if ($ig == null || $ig->getQuantity() < $ingredient->getQuantity()) {
+                    throw new BreakException();
+                }
+            }
+        } catch (BreakException $e) {
+            return false;
+        }
+        return true;
+    }
+
 //    /**
 //     * @return Recipe[] Returns an array of Recipe objects
 //     */

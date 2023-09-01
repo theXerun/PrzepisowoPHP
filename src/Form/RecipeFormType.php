@@ -21,7 +21,9 @@ class RecipeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'label' => "Nazwa"
+            ])
             ->add('ingredients', CollectionType::class, [
                 'entry_type' => IngredientFormType::class,
                 'allow_add' => true,
@@ -36,11 +38,15 @@ class RecipeFormType extends AbstractType
                 'entry_options' => [
                     'label' => false,
                 ],
+                'label' => 'Składniki'
 
             ])
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class,[
+                'label' => 'Opis',
+            ])
             ->add('isPublic', CheckboxType::class, [
                 'required' => false,
+                'label' => 'Czy chcesz udostępnić wszystkim ten przepis?'
             ])
             ->add('Zapisz', SubmitType::class, [
                 'attr' => [
