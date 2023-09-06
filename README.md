@@ -10,6 +10,8 @@ Co jest:
 - architektura MVC
 - wykorzystanie jednej tabeli dynamicznej w formularzu (tzn. że do tej tabeli dynamicznej można dodawać, usuwać wiersze i przy zapisie dane dodają się odpowiednio do encji) (zaimplementowane przy pomocy biblioteki js)
 
+ponadto wykorzystałem Tailwind oraz DaisyUI do zbudowania interfejsu
+
 Czego nie ma:
 
 - testów jednostkowych przy pomocy PHP Unit (dodawania elementów, usuwania elementów, edycję)
